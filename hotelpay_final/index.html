@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HotelPay — Бронирование отелей и глемпингов</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+  <meta name="description" content="Бронируйте лучшие отели и глемпинги по всей России. Гарантия лучшей цены, мгновенное подтверждение, бесплатная отмена.">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo">
+        <div class="header__logo-icon">🏨</div>
+        HotelPay
+      </a>
+      <nav class="header__nav">
+        <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+                <a href="promotions.html" class="header__nav-link" >Акции</a>
+      <a href="#" class="mobile-menu__link" onclick="toggleChat(); return false;">Поддержка</a>
+      </nav>
+      <div class="header__actions">
+        <div class="header__search">
+          <input type="text" class="header__search-input" placeholder="Поиск...">
+          <button class="header__btn header__search-toggle">🔍</button>
+        </div>
+        <button class="header__btn" onclick="if(!isLoggedIn()){requireAuthForFavorites('profile.html#favorites');}else{location.href='profile.html#favorites';}">
+          ❤️
+          <span class="header__btn-badge" style="display:none">0</span>
+        </button>
+        <a href="login.html" class="header__btn header__btn--primary" id="header-auth-btn">Войти</a>
+        <button class="header__menu-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu">
+    <nav class="mobile-menu__nav">
+      <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+            <a href="promotions.html" class="mobile-menu__link" >Акции</a>
+      <a href="#" class="mobile-menu__link" onclick="toggleChat(); return false;">Поддержка</a>
+      <a href="login.html" class="mobile-menu__link" id="mobile-auth-link">Войти</a>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <div class="hero__bg">
+      <div class="hero__bg-pattern"></div>
+    </div>
+    <div class="hero__content">
+      <h1 class="hero__title">Найдите идеальное место для <span>отдыха</span></h1>
+      <p class="hero__subtitle">Более 10 000 отелей и глемпингов по всей России</p>
+
+      <div class="search-box">
+        <div class="search-box__field" data-field="destination">
+          <div class="search-box__field-icon">📍</div>
+          <div class="search-box__field-content">
+            <span class="search-box__field-label">Куда едете?</span>
+            <input type="text" class="search-box__field-value" placeholder="Выберите город" id="destination-input">
+          </div>
+          <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
+        </div>
+        <div class="search-box__divider"></div>
+        <div class="search-box__field">
+          <div class="search-box__field-icon">📅</div>
+          <div class="search-box__field-content">
+            <span class="search-box__field-label">Заезд</span>
+            <input type="date" class="search-box__field-value" id="checkin-date">
+          </div>
+        </div>
+        <div class="search-box__divider"></div>
+        <div class="search-box__field">
+          <div class="search-box__field-icon">📅</div>
+          <div class="search-box__field-content">
+            <span class="search-box__field-label">Выезд</span>
+            <input type="date" class="search-box__field-value" id="checkout-date">
+          </div>
+        </div>
+        <div class="search-box__divider"></div>
+        <div class="search-box__field" data-field="guests" id="guests-field">
+          <div class="search-box__field-icon">👥</div>
+          <div class="search-box__field-content">
+            <span class="search-box__field-label">Гости</span>
+            <span class="search-box__field-value" id="guests-display">2 гостя, 1 номер</span>
+          </div>
+          <div class="search-box__guests-dropdown" id="guests-dropdown">
+            <div class="guests-row" data-type="adults">
+              <div>
+                <div class="guests-row__label">Взрослые</div>
+                <div class="guests-row__desc">Старше 12 лет</div>
+              </div>
+              <div class="guests-counter" data-min="1">
+                <button class="guests-counter__btn guests-counter__btn--minus">−</button>
+                <span class="guests-counter__value">2</span>
+                <button class="guests-counter__btn guests-counter__btn--plus">+</button>
+              </div>
+            </div>
+            <div class="guests-row" data-type="children">
+              <div>
+                <div class="guests-row__label">Дети</div>
+                <div class="guests-row__desc">До 12 лет</div>
+              </div>
+              <div class="guests-counter" data-min="0">
+                <button class="guests-counter__btn guests-counter__btn--minus" disabled>−</button>
+                <span class="guests-counter__value">0</span>
+                <button class="guests-counter__btn guests-counter__btn--plus">+</button>
+              </div>
+            </div>
+            <div class="guests-row" data-type="rooms">
+              <div>
+                <div class="guests-row__label">Номера</div>
+              </div>
+              <div class="guests-counter" data-min="1">
+                <button class="guests-counter__btn guests-counter__btn--minus">−</button>
+                <span class="guests-counter__value">1</span>
+                <button class="guests-counter__btn guests-counter__btn--plus">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="search-box__btn" onclick="if(!isLoggedIn()){requireAuth('catalog.html');return;}searchHotels();">
+          🔍 Найти
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <h2 class="section-header__title">Категории размещения</h2>
+        <p class="section-header__subtitle">Выберите тип отдыха по душе</p>
+      </div>
+      <div class="categories__grid" id="categories-grid">
+        <div class="category-card animate-on-scroll" onclick="location.href='catalog.html?type=hotel'">
+          <div class="category-card__icon">🏨</div>
+          <div class="category-card__name">Отели</div>
+          <div class="category-card__count">5 420 объектов</div>
+        </div>
+        <div class="category-card animate-on-scroll" onclick="location.href='catalog.html?type=glamping'">
+          <div class="category-card__icon">⛺</div>
+          <div class="category-card__name">Глемпинги</div>
+          <div class="category-card__count">1 280 объектов</div>
+        </div>
+        <div class="category-card animate-on-scroll" onclick="location.href='catalog.html'">
+          <div class="category-card__icon">🏠</div>
+          <div class="category-card__name">Апартаменты</div>
+          <div class="category-card__count">3 450 объектов</div>
+        </div>
+        <div class="category-card animate-on-scroll" onclick="location.href='catalog.html'">
+          <div class="category-card__icon">🏛️</div>
+          <div class="category-card__name">Виллы</div>
+          <div class="category-card__count">890 объектов</div>
+        </div>
+        <div class="category-card animate-on-scroll" onclick="location.href='catalog.html'">
+          <div class="category-card__icon">🛏️</div>
+          <div class="category-card__name">Хостелы</div>
+          <div class="category-card__count">2 100 объектов</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="popular">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <h2 class="section-header__title">Популярные направления</h2>
+        <p class="section-header__subtitle">Самые востребованные места для отдыха</p>
+      </div>
+      <div class="popular__grid" id="popular-grid"></div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <h2 class="section-header__title">Почему выбирают HotelPay</h2>
+        <p class="section-header__subtitle">Мы заботимся о вашем комфорте на каждом этапе</p>
+      </div>
+      <div class="features__grid">
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-card__icon">💰</div>
+          <div class="feature-card__title">Гарантия лучшей цены</div>
+          <div class="feature-card__desc">Нашли дешевле? Вернём разницу и предоставим скидку на следующее бронирование</div>
+        </div>
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-card__icon">⚡</div>
+          <div class="feature-card__title">Мгновенное подтверждение</div>
+          <div class="feature-card__desc">Бронирование подтверждается автоматически в течение нескольких секунд</div>
+        </div>
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-card__icon">🔄</div>
+          <div class="feature-card__title">Бесплатная отмена</div>
+          <div class="feature-card__desc">Отменяйте бронирование без штрафов за 24 часа до заезда</div>
+        </div>
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-card__icon">🎧</div>
+          <div class="feature-card__title">Круглосуточная поддержка</div>
+          <div class="feature-card__desc">Наша служба поддержки работает 24/7 на 12 языках, включая русский</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container">
+      <div class="stats__grid" id="stats-grid"></div>
+    </div>
+  </section>
+
+  <section class="reviews">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <h2 class="section-header__title">Отзывы гостей</h2>
+        <p class="section-header__subtitle">Что говорят о нас путешественники</p>
+      </div>
+      <div class="reviews__carousel">
+        <div class="reviews__track" id="reviews-track"></div>
+      </div>
+      <div class="reviews__dots" id="reviews-dots"></div>
+      <div class="reviews__nav">
+        <button class="reviews__nav-btn reviews__nav-btn--prev" id="reviews-prev">←</button>
+        <button class="reviews__nav-btn reviews__nav-btn--next" id="reviews-next">→</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta__pattern"></div>
+    <div class="container">
+      <div class="cta__content">
+        <h2 class="cta__title">Станьте партнёром HotelPay</h2>
+        <p class="cta__desc">Привлекайте больше гостей и увеличивайте доход с помощью нашей платформы бронирования</p>
+        <a href="#" class="cta__btn" onclick="if(!isLoggedIn()){requireAuth('add-property.html');}else{location.href='add-property.html';} return false;">Добавить объект →</a>
+        <div class="cta__apps">
+          <a href="#" class="cta__app-btn" onclick="alert('App Store скоро!')">
+            <span>📱</span>
+            <div class="cta__app-text">
+              <div class="cta__app-label">Загрузите в</div>
+              <div class="cta__app-name">App Store</div>
+            </div>
+          </a>
+          <a href="#" class="cta__app-btn" onclick="alert('Google Play скоро!')">
+            <span>🤖</span>
+            <div class="cta__app-text">
+              <div class="cta__app-label">Загрузите в</div>
+              <div class="cta__app-name">Google Play</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div class="footer__logo">
+            <div class="header__logo-icon">🏨</div>
+            HotelPay
+          </div>
+          <p class="footer__desc">Современная платформа для бронирования отелей и глемпингов по всей России. Гарантия лучшей цены и мгновенное подтверждение.</p>
+          
+        </div>
+        <div>
+          <div class="footer__title">О нас</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('about'); return false;">О компании</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('career'); return false;">Карьера</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('blog'); return false;">Блог</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__title">Поддержка</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Центр помощи</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('terms'); return false;">Условия бронирования</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('privacy'); return false;">Политика конфиденциальности</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('contacts'); return false;">Контакты</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__title">Партнёрам</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="if(!isLoggedIn()){requireAuth('add-property.html');}else{location.href='add-property.html';} return false;">Добавить объект</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('api'); return false;">API</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('ads'); return false;">Реклама</a>
+          </div>
+          <div class="footer__subscribe">
+            <div class="footer__subscribe-form">
+              <input type="email" class="footer__subscribe-input" placeholder="Ваш email" id="subscribe-email">
+              <button class="footer__subscribe-btn" onclick="subscribeNews()">→</button>
+            </div>
+          </div>
+          <div class="footer__payments">
+            <div class="footer__payment">VISA</div>
+            <div class="footer__payment">MC</div>
+            <div class="footer__payment">МИР</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <div class="footer__copyright">© 2026 HotelPay. Все права защищены.</div>
+        </div></div>
+  </footer>
+
+  <script src="js/hotels.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+
+<!-- Footer Modals -->
+
+
+
+  <script src="js/search.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/footer.js"></script>
+
+</body>
+</html>

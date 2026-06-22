@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Личный кабинет — HotelPay</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/booking.css">
+
+  <style>
+    /* Highlighted empty state buttons */
+    .empty-state__btn {
+      display: inline-block;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 1rem;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(217, 70, 239, 0.3);
+      border: 2px solid transparent;
+      margin-top: 8px;
+    }
+    .empty-state__btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(217, 70, 239, 0.5);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .empty-state__btn:active {
+      transform: translateY(0);
+    }
+  </style>
+  <style>
+    /* ===== PROFILE BUTTON FIXES ===== */
+    .profile-sidebar__nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .profile-sidebar__link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-light);
+      transition: var(--transition);
+      border: 2px solid transparent;
+      background: rgba(168, 85, 247, 0.05);
+      cursor: pointer;
+    }
+
+    .profile-sidebar__link:hover,
+    .profile-sidebar__link.active {
+      background: linear-gradient(135deg, rgba(107, 33, 168, 0.2), rgba(217, 70, 239, 0.2));
+      color: var(--accent);
+      border-color: rgba(168, 85, 247, 0.3);
+      transform: translateX(4px);
+    }
+
+    .profile-sidebar__link span {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    /* Empty state buttons - even and prominent */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+    }
+
+    .empty-state__icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.7;
+    }
+
+    .empty-state__title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .empty-state__text {
+      color: var(--text-light);
+      margin-bottom: 28px;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .empty-state__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 1rem;
+      transition: var(--transition);
+      box-shadow: 0 4px 20px rgba(217, 70, 239, 0.3);
+      border: 2px solid transparent;
+      text-align: center;
+      min-width: 220px;
+      letter-spacing: 0.3px;
+    }
+
+    .empty-state__btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(217, 70, 239, 0.5);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .empty-state__btn:active {
+      transform: translateY(-1px);
+    }
+
+    /* Booking card buttons - even layout */
+    .booking-card__actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      justify-content: center;
+      min-width: 160px;
+    }
+
+    .booking-card__btn {
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      width: 100%;
+    }
+
+    .booking-card__btn--primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      box-shadow: 0 4px 15px rgba(217, 70, 239, 0.2);
+    }
+
+    .booking-card__btn--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(217, 70, 239, 0.4);
+    }
+
+    .booking-card__btn--secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
+
+    .booking-card__btn--secondary:hover {
+      background: rgba(168, 85, 247, 0.1);
+      border-color: var(--accent);
+    }
+
+    .booking-card__btn--danger {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+    }
+
+    .booking-card__btn--danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    @media (max-width: 1024px) {
+      .booking-card__actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+        width: 100%;
+      }
+      .booking-card__btn {
+        flex: 1;
+        min-width: 120px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .booking-card {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .booking-card__img {
+        height: 200px;
+      }
+      .booking-card__actions {
+        flex-direction: row;
+        width: 100%;
+      }
+      .profile-layout {
+        grid-template-columns: 1fr;
+      }
+      .profile-sidebar {
+        display: none;
+      }
+    }
+
+    /* Favorite remove button - even */
+    .favorite-remove-wrapper {
+      padding: 16px 20px 20px;
+      margin-top: 0;
+      border-top: 1px solid rgba(168, 85, 247, 0.1);
+    }
+
+    .favorite-remove-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1.5px solid rgba(239, 68, 68, 0.25);
+      border-radius: var(--radius);
+      color: #ef4444;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .favorite-remove-btn:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.15);
+    }
+
+    .favorite-remove-btn:active {
+      transform: translateY(0);
+    }
+
+    .favorite-remove-icon {
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .favorite-remove-btn:hover .favorite-remove-icon {
+      transform: scale(1.2) rotate(-10deg);
+    }
+
+    .favorite-remove-text {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Card removal animation */
+    .property-card.removing {
+      animation: cardRemove 0.4s ease forwards;
+    }
+
+    @keyframes cardRemove {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.95); }
+      100% { opacity: 0; transform: scale(0.9); margin-bottom: -100%; }
+    }
+
+    /* Profile content buttons */
+    .profile-content .booking-summary__btn,
+    .profile-content .settings-avatar__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      gap: 8px;
+    }
+
+    .profile-content .booking-summary__btn {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      box-shadow: 0 4px 15px rgba(217, 70, 239, 0.2);
+    }
+
+    .profile-content .booking-summary__btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(217, 70, 239, 0.4);
+    }
+
+    .settings-avatar__btn--primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      box-shadow: 0 4px 15px rgba(217, 70, 239, 0.2);
+    }
+
+    .settings-avatar__btn--danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .settings-avatar__btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .settings-avatar__actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .settings-avatar {
+        flex-direction: column;
+        text-align: center;
+      }
+      .settings-avatar__actions {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo">
+        <div class="header__logo-icon">🏨</div>
+        HotelPay
+      </a>
+      <nav class="header__nav">
+        <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+                <a href="promotions.html" class="header__nav-link" >Акции</a>
+      <a href="#" class="mobile-menu__link" onclick="toggleChat(); return false;">Поддержка</a>
+      </nav>
+      <div class="header__actions">
+        <div class="header__search">
+          <input type="text" class="header__search-input" placeholder="Поиск...">
+          <button class="header__btn header__search-toggle">🔍</button>
+        </div>
+        <button class="header__btn" onclick="if(!isLoggedIn()){requireAuthForFavorites('profile.html#favorites');}else{location.href='profile.html#favorites';}">
+          ❤️
+          <span class="header__btn-badge" style="display:none">0</span>
+        </button>
+        <a href="login.html" class="header__btn header__btn--primary" id="auth-btn">Войти</a>
+        <button class="header__menu-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu">
+    <nav class="mobile-menu__nav">
+      <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+            <a href="promotions.html" class="mobile-menu__link" >Акции</a>
+      <a href="#" class="mobile-menu__link" onclick="toggleChat(); return false;">Поддержка</a>
+      <a href="profile.html" class="mobile-menu__link">Личный кабинет</a>
+    </nav>
+  </div>
+
+  <main class="profile-page page-content">
+    <div class="container">
+      <div class="profile-layout">
+        <aside class="profile-sidebar">
+          <div class="profile-sidebar__user">
+            <div class="profile-sidebar__avatar" id="profile-avatar">АИ</div>
+            <div class="profile-sidebar__name" id="profile-name">Алексей Иванов</div>
+            <div class="profile-sidebar__email" id="profile-email">alexey@example.com</div>
+          </div>
+          <nav class="profile-sidebar__nav">
+            <a href="#bookings" class="profile-sidebar__link" onclick="switchTab('bookings', this)">
+              <span>📋</span> Мои бронирования
+            </a>
+            <a href="#favorites" class="profile-sidebar__link" onclick="switchTab('favorites', this)">
+              <span>❤️</span> Избранное
+            </a>
+            <a href="#my-objects" class="profile-sidebar__link" onclick="switchTab('my-objects', this)">
+              <span>🏨</span> Мои объекты
+            </a>
+            <a href="#settings" class="profile-sidebar__link" onclick="switchTab('settings', this)">
+              <span>⚙️</span> Настройки
+            </a>
+            <a href="#" class="profile-sidebar__link" onclick="logout(); return false;">
+              <span>🚪</span> Выйти
+            </a>
+          </nav>
+        </aside>
+
+        <div class="profile-content">
+          <div id="bookings" class="profile-tab">
+            <h2 class="profile-content__title">Мои бронирования</h2>
+            <div id="bookings-list">
+              <div class="empty-state" class="empty-state">
+                <div class="empty-state__icon">📋</div>
+                <div class="empty-state__title">У вас пока нет бронирований</div>
+                <div class="empty-state__text">Забронируйте отель или глемпинг, и он появится здесь</div>
+                <a href="catalog.html" class="empty-state__btn">Найти жильё</a>
+              </div>
+            </div>
+          </div>
+
+          <div id="favorites" class="profile-tab" style="display:none;">
+            <h2 class="profile-content__title">Избранное</h2>
+            <div class="favorites-grid" id="favorites-grid"></div>
+          </div>
+
+          <div id="my-objects" class="profile-tab" style="display:none;">
+            <h2 class="profile-content__title">Мои объекты</h2>
+            <div id="my-objects-list"></div>
+          </div>
+
+          <div id="settings" class="profile-tab" style="display:none;">
+            <h2 class="profile-content__title">Настройки профиля</h2>
+            <div class="settings-avatar">
+              <div class="settings-avatar__img">АИ</div>
+              <div class="settings-avatar__actions">
+                <button class="settings-avatar__btn settings-avatar__btn--primary" onclick="alert('Загрузка фото скоро!')">Изменить фото</button>
+                <button class="settings-avatar__btn settings-avatar__btn--danger" onclick="alert('Фото удалено!')">Удалить фото</button>
+              </div>
+            </div>
+            <form class="settings-form" onsubmit="event.preventDefault(); alert('Изменения сохранены!')">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Имя</label>
+                  <input type="text" class="form-input" id="settings-firstname" value="Алексей">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Фамилия</label>
+                  <input type="text" class="form-input" id="settings-lastname" value="Иванов">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" id="settings-email" value="alexey@example.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Телефон</label>
+                <input type="tel" class="form-input" id="settings-phone" value="+7 (999) 123-45-67">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Город</label>
+                <input type="text" class="form-input" value="Москва">
+              </div>
+              <div class="form-group">
+                <label class="form-label">О себе</label>
+                <textarea class="form-textarea" placeholder="Расскажите о себе..."></textarea>
+              </div>
+              <button type="submit" class="booking-summary__btn" style="max-width: 200px;">Сохранить изменения</button>
+            </form>
+
+            <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid rgba(168,85,247,0.1);">
+              <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; color: var(--text);">Безопасность</h3>
+              <div class="form-group">
+                <label class="form-label">Текущий пароль</label>
+                <input type="password" class="form-input" placeholder="••••••••">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Новый пароль</label>
+                  <input type="password" class="form-input" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Подтвердите пароль</label>
+                  <input type="password" class="form-input" placeholder="••••••••">
+                </div>
+              </div>
+              <button class="booking-summary__btn" style="max-width: 200px; background: linear-gradient(135deg, var(--primary), var(--accent));" onclick="alert('Пароль изменён!')">Изменить пароль</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div class="footer__logo">
+            <div class="header__logo-icon">🏨</div>
+            HotelPay
+          </div>
+          <p class="footer__desc">Современная платформа для бронирования отелей и глемпингов по всей России.</p>
+          
+        </div>
+        <div>
+          <div class="footer__title">О нас</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">О компании</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Карьера</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Пресса</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Блог</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__title">Поддержка</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Центр помощи</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Условия</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Конфиденциальность</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Контакты</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__title">Партнёрам</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Добавить объект</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Личный кабинет</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">API</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Реклама</a>
+          </div>
+          <div class="footer__subscribe">
+            <div class="footer__subscribe-form">
+              <input type="email" class="footer__subscribe-input" placeholder="Ваш email">
+              <button class="footer__subscribe-btn" onclick="alert('Подписка оформлена!')">→</button>
+            </div>
+          </div>
+          <div class="footer__payments">
+            <div class="footer__payment">VISA</div>
+            <div class="footer__payment">MC</div>
+            <div class="footer__payment">МИР</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <div class="footer__copyright">© 2026 HotelPay. Все права защищены.</div>
+        <div>🇷🇺 Русский</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/hotels.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+
+<script>
+
+</script>
+
+</body>
+</html>

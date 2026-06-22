@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход — HotelPay</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/auth.css">
+
+<script src="js/auth.js"></script>
+<script>
+// Redirect if already logged in
+document.addEventListener('DOMContentLoaded', function() {
+  if (isLoggedIn()) {
+    var returnUrl = localStorage.getItem('hotelpay_return_url');
+    if (returnUrl) {
+      localStorage.removeItem('hotelpay_return_url');
+      window.location.href = returnUrl;
+    } else {
+      window.location.href = 'index.html';
+    }
+  }
+});
+</script>
+</head>
+<body>
+  <header class="header">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo">
+        <div class="header__logo-icon">🏨</div>
+        HotelPay
+      </a>
+      <nav class="header__nav">
+        <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+              </nav>
+      <div class="header__actions">
+        <a href="login.html" class="header__btn header__btn--primary">Войти</a>
+        <button class="header__menu-btn">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu">
+    <nav class="mobile-menu__nav">
+      <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+      <a href="catalog.html" class="mobile-menu__link">Направления</a>
+    </nav>
+  </div>
+
+  <main class="auth-page">
+    <div class="auth-container">
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login')" id="tab-login">Вход</button>
+        <button class="auth-tab" onclick="switchAuthTab('register')" id="tab-register">Регистрация</button>
+      </div>
+
+      <!-- Login Form -->
+      <div class="auth-form" id="form-login">
+        <h2 class="auth-title">Добро пожаловать!</h2>
+        <p class="auth-subtitle">Войдите в аккаунт для бронирования</p>
+
+        <form onsubmit="event.preventDefault(); handleLogin();">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" placeholder="your@email.com" id="login-email" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Пароль</label>
+            <input type="password" class="form-input" placeholder="••••••••" id="login-password" required>
+          </div>
+          <button type="submit" class="auth-btn">Войти</button>
+        </form>
+
+
+      </div>
+
+      <!-- Register Form -->
+      <div class="auth-form" id="form-register" style="display:none;">
+        <h2 class="auth-title">Создать аккаунт</h2>
+        <p class="auth-subtitle">Зарегистрируйтесь для доступа к бронированию</p>
+
+        <form onsubmit="event.preventDefault(); handleRegister();">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Имя <span>*</span></label>
+              <input type="text" class="form-input" placeholder="Иван" id="reg-firstname" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Фамилия <span>*</span></label>
+              <input type="text" class="form-input" placeholder="Иванов" id="reg-lastname" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email <span>*</span></label>
+            <input type="email" class="form-input" placeholder="your@email.com" id="reg-email" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Телефон <span>*</span></label>
+            <input type="tel" class="form-input" placeholder="+7 (999) 123-45-67" id="reg-phone" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Пароль <span>*</span></label>
+            <input type="password" class="form-input" placeholder="Минимум 8 символов" id="reg-password" required minlength="8">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Подтвердите пароль <span>*</span></label>
+            <input type="password" class="form-input" placeholder="••••••••" id="reg-password2" required>
+          </div>
+          <label class="filter-checkbox" style="margin-bottom: 20px;">
+            <input type="checkbox" id="reg-terms" required>
+            <span>Я согласен с <a href="#" class="auth-link" onclick="alert('Условия скоро!')">условиями использования</a></span>
+          </label>
+          <button type="submit" class="auth-btn">Зарегистрироваться</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/auth.js"></script>
+<script>
+
+</script>
+  <script src="js/search.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/footer.js"></script>
+</body>
+</html>

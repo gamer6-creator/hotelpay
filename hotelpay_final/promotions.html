@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Акции и спецпредложения — HotelPay</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/catalog.css">
+  <style>
+    .promo-hero {
+      padding: calc(var(--header-height) + 48px) 0 48px;
+      background: linear-gradient(135deg, #0f0a1a 0%, #1a1033 50%, #2d1b4e 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .promo-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 80%, rgba(217, 70, 239, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(239, 68, 68, 0.2) 0%, transparent 50%);
+    }
+    .promo-hero__content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .promo-hero__badge {
+      display: inline-block;
+      padding: 8px 20px;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+      animation: pulse-promotion 2s infinite;
+    }
+    .promo-hero__title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: white;
+      margin-bottom: 16px;
+    }
+    .promo-hero__title span {
+      background: linear-gradient(135deg, #ef4444, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .promo-hero__subtitle {
+      color: rgba(243, 232, 255, 0.7);
+      font-size: 1.1rem;
+      margin-bottom: 32px;
+    }
+    .promo-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 50px;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+    .promo-count strong {
+      color: var(--accent);
+      font-size: 1.2rem;
+    }
+
+    .promo-section {
+      padding: 48px 0 80px;
+      background: var(--bg);
+    }
+    .promo-section__title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .promo-section__subtitle {
+      color: var(--text-light);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .promo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .promo-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: var(--transition);
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      position: relative;
+    }
+    .promo-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.6);
+    }
+    .promo-card__image {
+      position: relative;
+      aspect-ratio: 16/10;
+      background-size: cover;
+      background-position: center;
+    }
+    .promo-card__discount {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.5);
+      z-index: 2;
+      animation: pulse-promotion 2s infinite;
+    }
+    .promo-card__discount::before {
+      content: '🔥 ';
+    }
+    .promo-card__timer {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      background: rgba(15, 10, 26, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .promo-card__timer-icon {
+      color: #ef4444;
+    }
+    .promo-card__content {
+      padding: 24px;
+    }
+    .promo-card__name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .promo-card__location {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .promo-card__desc {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .promo-card__price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.1);
+    }
+    .promo-card__price-old {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+    .promo-card__price-new {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ef4444, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .promo-card__price-unit {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    .promo-card__savings {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--success);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .promo-card__btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 1rem;
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+      border: none;
+      cursor: pointer;
+    }
+    .promo-card__btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+    }
+
+    .promo-empty {
+      text-align: center;
+      padding: 80px 24px;
+      grid-column: 1 / -1;
+    }
+    .promo-empty__icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+    .promo-empty__title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .promo-empty__text {
+      color: var(--text-light);
+      margin-bottom: 24px;
+    }
+
+    @keyframes pulse-promotion {
+      0%, 100% { box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); }
+      50% { box-shadow: 0 4px 25px rgba(239, 68, 68, 0.7); }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo">
+        <div class="header__logo-icon">🏨</div>
+        HotelPay
+      </a>
+      <nav class="header__nav">
+        <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+        <a href="promotions.html" class="header__nav-link active" id="nav-promotions">Акции</a>
+      <a href="#" class="mobile-menu__link" onclick="toggleChat(); return false;">Поддержка</a>
+      </nav>
+      <div class="header__actions">
+        <div class="header__search">
+          <input type="text" class="header__search-input" placeholder="Поиск...">
+          <button class="header__btn header__search-toggle">🔍</button>
+        </div>
+        <button class="header__btn" onclick="if(!isLoggedIn()){requireAuthForFavorites('./profile.html#favorites');}else{location.href='profile.html#favorites';}">
+          ❤️
+          <span class="header__btn-badge" style="display:none">0</span>
+        </button>
+        <a href="login.html" class="header__btn header__btn--primary" id="header-auth-btn">Войти</a>
+        <button class="header__menu-btn" id="menu-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <nav class="mobile-menu__nav">
+      <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+      <a href="promotions.html" class="mobile-menu__link active" id="mobile-nav-promotions">Акции</a>
+      <a href="#" class="mobile-menu__link" onclick="toggleChat(); return false;">Поддержка</a>
+      <a href="login.html" class="mobile-menu__link" id="mobile-auth-link">Войти</a>
+    </nav>
+  </div>
+
+  <section class="promo-hero">
+    <div class="promo-hero__content">
+      <div class="promo-hero__badge">🔥 Горячие предложения</div>
+      <h1 class="promo-hero__title">Акции и спецпредложения <span>до -20%</span></h1>
+      <p class="promo-hero__subtitle">Лучшие отели и глемпинги со скидками. Успейте забронировать по выгодной цене!</p>
+      <div class="promo-count">Найдено <strong id="promo-count">0</strong> акционных предложений</div>
+    </div>
+  </section>
+
+  <section class="promo-section">
+    <div class="container">
+      <h2 class="promo-section__title">Активные акции</h2>
+      <p class="promo-section__subtitle">Только проверенные отели с реальными скидками</p>
+      <div class="promo-grid" id="promo-grid"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div class="footer__logo">
+            <div class="header__logo-icon">🏨</div>
+            HotelPay
+          </div>
+          <p class="footer__desc">Современная платформа для бронирования отелей и глемпингов по всей России.</p>
+          
+        </div>
+        <div>
+          <div class="footer__title">О нас</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">О компании</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Карьера</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Пресса</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Блог</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__title">Поддержка</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Центр помощи</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Условия</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Конфиденциальность</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Контакты</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__title">Партнёрам</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="if(!isLoggedIn()){requireAuth('./add-property.html');}else{location.href='add-property.html';} return false;">Добавить объект</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Личный кабинет</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">API</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Реклама</a>
+          </div>
+          <div class="footer__subscribe">
+            <div class="footer__subscribe-form">
+              <input type="email" class="footer__subscribe-input" placeholder="Ваш email">
+              <button class="footer__subscribe-btn" onclick="alert('Подписка оформлена!')">→</button>
+            </div>
+          </div>
+          <div class="footer__payments">
+            <div class="footer__payment">VISA</div>
+            <div class="footer__payment">MC</div>
+            <div class="footer__payment">МИР</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <div class="footer__copyright">© 2026 HotelPay. Все права защищены.</div>
+        <div>🇷🇺 Русский</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/hotels.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+  <script>
+    // Render promotions
+    function renderPromotions() {
+      const grid = document.getElementById('promo-grid');
+      const countEl = document.getElementById('promo-count');
+      if (!grid || typeof hotels === 'undefined') return;
+
+      const promoHotels = hotels.filter(h => h.promotion);
+
+      if (countEl) countEl.textContent = promoHotels.length;
+
+      if (promoHotels.length === 0) {
+        grid.innerHTML = `
+          <div class="promo-empty">
+            <div class="promo-empty__icon">🔍</div>
+            <div class="promo-empty__title">Акций пока нет</div>
+            <div class="promo-empty__text">Следите за обновлениями — скоро появятся новые предложения!</div>
+            <a href="catalog.html" class="empty-state__btn">Перейти в каталог</a>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = promoHotels.map(hotel => {
+        const savings = hotel.oldPrice - hotel.price;
+        const discount = hotel.discountPercent;
+
+        // Generate random timer for each hotel
+        const days = Math.floor(Math.random() * 5) + 1;
+        const hours = Math.floor(Math.random() * 24);
+
+        return `
+        <div class="promo-card">
+          <div class="promo-card__image" style="background-image: url('${hotel.images[0]}')">
+            <div class="promo-card__discount">-${discount}%</div>
+            <div class="promo-card__timer">
+              <span class="promo-card__timer-icon">⏱️</span>
+              Осталось: ${days} дн. ${hours} ч.
+            </div>
+          </div>
+          <div class="promo-card__content">
+            <h3 class="promo-card__name">${hotel.name}</h3>
+            <div class="promo-card__location">📍 ${hotel.city}, ${hotel.region}</div>
+            <p class="promo-card__desc">${hotel.description}</p>
+            <div class="promo-card__savings">💰 Экономия ${savings.toLocaleString('ru-RU')} ₽</div>
+            <div class="promo-card__price-row">
+              <span class="promo-card__price-old">${hotel.oldPrice.toLocaleString('ru-RU')} ₽</span>
+              <span class="promo-card__price-new">${hotel.price.toLocaleString('ru-RU')} ₽</span>
+              <span class="promo-card__price-unit">/ночь</span>
+            </div>
+            <a href="property.html?id=${hotel.id}" class="promo-card__btn">Забронировать со скидкой</a>
+          </div>
+        </div>
+      `}).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      renderPromotions();
+    });
+  </script>
+  <script src="js/chat.js"></script>
+  <script src="js/footer.js"></script>
+</body>
+</html>

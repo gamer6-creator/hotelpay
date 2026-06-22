@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог — HotelPay</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/catalog.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo">
+        <div class="header__logo-icon">🏨</div>
+        HotelPay
+      </a>
+      <nav class="header__nav">
+        <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+                <a href="promotions.html" class="header__nav-link" >Акции</a>
+      <a href="#" class="mobile-menu__link" onclick="toggleChat(); return false;">Поддержка</a>
+      </nav>
+      <div class="header__actions">
+        <div class="header__search">
+          <input type="text" class="header__search-input" placeholder="Поиск...">
+          <button class="header__btn header__search-toggle">🔍</button>
+        </div>
+        <button class="header__btn" onclick="if(!isLoggedIn()){requireAuthForFavorites('profile.html#favorites');}else{location.href='profile.html#favorites';}">
+          ❤️
+          <span class="header__btn-badge" style="display:none">0</span>
+        </button>
+        <a href="login.html" class="header__btn header__btn--primary" id="header-auth-btn">Войти</a>
+        <button class="header__menu-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu">
+    <nav class="mobile-menu__nav">
+      <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+            <a href="promotions.html" class="mobile-menu__link" >Акции</a>
+      <a href="#" class="mobile-menu__link" onclick="toggleChat(); return false;">Поддержка</a>
+      <a href="login.html" class="mobile-menu__link" id="mobile-auth-link">Войти</a>
+    </nav>
+  </div>
+
+  <main class="catalog-page page-content">
+    <div class="container">
+      <div class="catalog-header">
+        <h1 class="catalog-header__title">Найдено 12 объектов</h1>
+        <p class="catalog-header__subtitle">Отели и глемпинги по всей России</p>
+      </div>
+
+      <div class="catalog-layout">
+        <aside class="filters" id="filters-sidebar">
+          <div class="filters__section">
+            <div class="filters__section-title" onclick="toggleFilter(this)">
+              Тип размещения
+              <span class="filters__section-toggle">▼</span>
+            </div>
+            <div class="filters__list">
+              <label class="filter-checkbox">
+                <input type="radio" name="type-filter" checked onchange="filterByType('all')">
+                <span>Все типы</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="radio" name="type-filter" onchange="filterByType('hotel')">
+                <span>Отели</span>
+                <span class="filter-checkbox__count">5 420</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="radio" name="type-filter" onchange="filterByType('glamping')">
+                <span>Глемпинги</span>
+                <span class="filter-checkbox__count">1 280</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="radio" name="type-filter" onchange="filterByType('apartment')">
+                <span>Апартаменты</span>
+                <span class="filter-checkbox__count">3 450</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="radio" name="type-filter" onchange="filterByType('villa')">
+                <span>Виллы</span>
+                <span class="filter-checkbox__count">890</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="filters__section">
+            <div class="filters__section-title" onclick="toggleFilter(this)">
+              Цена за ночь
+              <span class="filters__section-toggle">▼</span>
+            </div>
+            <div class="price-range">
+              <div class="price-range__inputs">
+                <input type="number" class="price-range__input price-range__input--min" value="0" placeholder="От" id="price-min" min="0" max="50000">
+                <span style="color: var(--text-light); font-weight: 600;">—</span>
+                <input type="number" class="price-range__input price-range__input--max" value="50000" placeholder="До" id="price-max" min="0" max="50000">
+              </div>
+              <div class="price-range__slider">
+                <div class="price-range__slider-track" style="left: 0%; right: 0%;"></div>
+                <div class="price-range__slider-thumb price-range__slider-thumb--min" style="left: 0%;"></div>
+                <div class="price-range__slider-thumb price-range__slider-thumb--max" style="left: 100%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="filters__section">
+            <div class="filters__section-title" onclick="toggleFilter(this)">
+              Рейтинг
+              <span class="filters__section-toggle">▼</span>
+            </div>
+            <div class="filters__list">
+              <label class="star-filter">
+                <input type="radio" name="rating" value="5" onchange="filterByRating(5)">
+                <span class="star-filter__stars">⭐⭐⭐⭐⭐</span>
+                <span class="star-filter__label">5 звёзд</span>
+              </label>
+              <label class="star-filter">
+                <input type="radio" name="rating" value="4" onchange="filterByRating(4)">
+                <span class="star-filter__stars">⭐⭐⭐⭐☆</span>
+                <span class="star-filter__label">4+ звёзды</span>
+              </label>
+              <label class="star-filter">
+                <input type="radio" name="rating" value="3" onchange="filterByRating(3)">
+                <span class="star-filter__stars">⭐⭐⭐☆☆</span>
+                <span class="star-filter__label">3+ звёзды</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="filters__section">
+            <div class="filters__section-title" onclick="toggleFilter(this)">
+              Удобства
+              <span class="filters__section-toggle">▼</span>
+            </div>
+            <div class="filters__list">
+              <label class="filter-checkbox">
+                <input type="checkbox" onchange="filterByAmenity('wifi')">
+                <span>📶 Wi-Fi</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" onchange="filterByAmenity('pool')">
+                <span>🏊 Бассейн</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" onchange="filterByAmenity('parking')">
+                <span>🅿️ Парковка</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" onchange="filterByAmenity('spa')">
+                <span>💆 SPA</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" onchange="filterByAmenity('restaurant')">
+                <span>🍽️ Ресторан</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" onchange="filterByAmenity('gym')">
+                <span>💪 Тренажёрный зал</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="filters__section">
+            <div class="filters__section-title" onclick="toggleFilter(this)">
+              Правила
+              <span class="filters__section-toggle">▼</span>
+            </div>
+            <div class="filters__list">
+              <label class="filter-checkbox">
+                <input type="checkbox" onchange="filterByAmenity('pets')">
+                <span>🐕 Можно с животными</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" onchange="filterByAmenity('cancel')">
+                <span>✓ Бесплатная отмена</span>
+              </label>
+            </div>
+          </div>
+        </aside>
+
+        <div class="catalog-results">
+          <button class="filters__mobile-toggle" id="filters-toggle">
+            ⚙️ Фильтры
+          </button>
+
+          <div class="sort-bar">
+            <span class="sort-bar__count">Найдено <strong>12</strong> объектов</span>
+            <div class="sort-bar__controls">
+              <select class="sort-bar__select" id="sort-select" onchange="sortHotels(this.value)">
+                <option value="popular">По популярности</option>
+                <option value="price-asc">Цена: по возрастанию</option>
+                <option value="price-desc">Цена: по убыванию</option>
+                <option value="rating">Рейтинг</option>
+              </select>
+              <div class="sort-bar__view-toggle">
+                <button class="sort-bar__view-btn active" data-view="grid" onclick="toggleView('grid')">▦</button>
+                <button class="sort-bar__view-btn" data-view="list" onclick="toggleView('list')">☰</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="properties-grid" id="properties-grid"></div>
+
+          <div class="pagination">
+            <button class="pagination__btn" disabled>←</button>
+            <a href="catalog.html" class="pagination__btn active">1</a>
+            <a href="catalog2.html" class="pagination__btn">2</a>
+            <a href="catalog3.html" class="pagination__btn">3</a>
+            <span>...</span>
+            <a href="catalog2.html" class="pagination__btn">→</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  <script>
+// Filter for page 1 - store original hotels and create page subset
+(function() {
+  if (typeof hotels !== 'undefined') {
+    // Store original full hotels array for filtering
+    window.allHotels = hotels.slice();
+    // Create page-specific subset
+    window.hotelsPage1 = hotels.filter(function(h) { return h.id >= 1 && h.id <= 6; });
+    // Set current hotels to page subset for initial display
+    hotels = window.hotelsPage1;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.getElementById('properties-grid')) {
+        var countEl = document.querySelector('.sort-bar__count strong');
+        if (countEl) countEl.textContent = window.hotelsPage1.length;
+        var titleEl = document.querySelector('.catalog-header__title');
+        if (titleEl) titleEl.textContent = 'Найдено ' + window.hotelsPage1.length + ' объектов';
+      }
+    });
+  }
+})();
+</script>
+</main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div class="footer__logo">
+            <div class="header__logo-icon">🏨</div>
+            HotelPay
+          </div>
+          <p class="footer__desc">Современная платформа для бронирования отелей и глемпингов по всей России.</p>
+          
+        </div>
+        <div>
+          <div class="footer__title">О нас</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">О компании</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Карьера</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Пресса</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Блог</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__title">Поддержка</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Центр помощи</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Условия</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Конфиденциальность</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Контакты</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__title">Партнёрам</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Добавить объект</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Личный кабинет</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">API</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Реклама</a>
+          </div>
+          <div class="footer__subscribe">
+            <div class="footer__subscribe-form">
+              <input type="email" class="footer__subscribe-input" placeholder="Ваш email">
+              <button class="footer__subscribe-btn" onclick="alert('Подписка оформлена!')">→</button>
+            </div>
+          </div>
+          <div class="footer__payments">
+            <div class="footer__payment">VISA</div>
+            <div class="footer__payment">MC</div>
+            <div class="footer__payment">МИР</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <div class="footer__copyright">© 2026 HotelPay. Все права защищены.</div>
+        <div>🇷🇺 Русский</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/hotels.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/footer.js"></script>
+</body>
+</html>

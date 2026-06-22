@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бронирование — HotelPay</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/booking.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo">
+        <div class="header__logo-icon">🏨</div>
+        HotelPay
+      </a>
+      <nav class="header__nav">
+        <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+                <a href="promotions.html" class="header__nav-link" >Акции</a>
+      <a href="#" class="mobile-menu__link" onclick="toggleChat(); return false;">Поддержка</a>
+      </nav>
+      <div class="header__actions">
+        <div class="header__search">
+          <input type="text" class="header__search-input" placeholder="Поиск...">
+          <button class="header__btn header__search-toggle">🔍</button>
+        </div>
+        <button class="header__btn" onclick="if(!isLoggedIn()){requireAuthForFavorites('profile.html#favorites');}else{location.href='profile.html#favorites';}">
+          ❤️
+          <span class="header__btn-badge" style="display:none">0</span>
+        </button>
+        <a href="login.html" class="header__btn header__btn--primary" id="auth-btn">Войти</a>
+        <button class="header__menu-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu">
+    <nav class="mobile-menu__nav">
+      <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+            <a href="promotions.html" class="mobile-menu__link" >Акции</a>
+      <a href="#" class="mobile-menu__link" onclick="toggleChat(); return false;">Поддержка</a>
+      <a href="profile.html" class="mobile-menu__link">Личный кабинет</a>
+    </nav>
+  </div>
+
+  <main class="booking-page page-content">
+    <div class="container">
+      <div class="booking-steps">
+        <div class="booking-step completed">
+          <div class="booking-step__number">✓</div>
+          <div class="booking-step__label">Выбор</div>
+        </div>
+        <div class="booking-step__divider"></div>
+        <div class="booking-step active">
+          <div class="booking-step__number">2</div>
+          <div class="booking-step__label">Данные</div>
+        </div>
+        <div class="booking-step__divider"></div>
+        <div class="booking-step">
+          <div class="booking-step__number">3</div>
+          <div class="booking-step__label">Оплата</div>
+        </div>
+      </div>
+
+      <div class="booking-layout">
+        <div class="booking-form">
+          <div class="booking-form__section">
+            <h2 class="booking-form__section-title">
+              <span>👤</span> Данные гостей
+            </h2>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Имя <span>*</span></label>
+                <input type="text" class="form-input" placeholder="Иван" id="guest-firstname">
+                <div class="form-error">Введите имя</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Фамилия <span>*</span></label>
+                <input type="text" class="form-input" placeholder="Иванов" id="guest-lastname">
+                <div class="form-error">Введите фамилию</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Email <span>*</span></label>
+                <input type="email" class="form-input" placeholder="ivan@example.com" id="guest-email">
+                <div class="form-error">Введите корректный email</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Телефон <span>*</span></label>
+                <input type="tel" class="form-input" placeholder="+7 (999) 123-45-67" id="guest-phone">
+                <div class="form-error">Введите телефон</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Пожелания</label>
+              <textarea class="form-textarea" placeholder="Особые пожелания к бронированию..." id="guest-wishes"></textarea>
+            </div>
+          </div>
+
+          <div class="booking-form__section">
+            <h2 class="booking-form__section-title">
+              <span>💳</span> Способ оплаты
+            </h2>
+            <div class="payment-methods">
+              <div class="payment-method active" onclick="selectPayment(this, 'card')">
+                <div class="payment-method__icon">💳</div>
+                <div class="payment-method__name">Банковская карта</div>
+              </div>
+              <div class="payment-method" onclick="selectPayment(this, 'sbp')">
+                <div class="payment-method__icon">📱</div>
+                <div class="payment-method__name">СБП</div>
+              </div>
+              <div class="payment-method" onclick="selectPayment(this, 'wallet')">
+                <div class="payment-method__icon">💰</div>
+                <div class="payment-method__name">Электронный кошелёк</div>
+              </div>
+            </div>
+            <div class="form-row card-inputs">
+              <div class="form-group">
+                <label class="form-label">Номер карты</label>
+                <input type="text" class="form-input" placeholder="0000 0000 0000 0000" maxlength="19" id="card-number">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Срок</label>
+                <input type="text" class="form-input" placeholder="MM/YY" maxlength="5" id="card-expiry">
+              </div>
+              <div class="form-group">
+                <label class="form-label">CVV</label>
+                <input type="text" class="form-input" placeholder="123" maxlength="3" id="card-cvv">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Имя на карте</label>
+              <input type="text" class="form-input" placeholder="IVAN IVANOV" id="card-name">
+            </div>
+          </div>
+
+          <div class="booking-form__section">
+            <h2 class="booking-form__section-title">
+              <span>📋</span> Условия бронирования
+            </h2>
+            <label class="filter-checkbox" style="margin-bottom: 12px;">
+              <input type="checkbox" id="terms-agree">
+              <span>Я согласен с <a href="#" style="color: var(--accent);" onclick="alert('Условия скоро!')">условиями бронирования</a> и <a href="#" style="color: var(--accent);" onclick="alert('Политика скоро!')">политикой конфиденциальности</a></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="booking-summary">
+          <div class="booking-summary__property">
+            <div class="booking-summary__img" style="background: linear-gradient(135deg, #667eea, #764ba2)"></div>
+            <div class="booking-summary__info">
+              <div class="booking-summary__name">Alpen Glamping</div>
+              <div class="booking-summary__location">📍 Сочи, Краснодарский край</div>
+            </div>
+          </div>
+          <div class="booking-summary__dates">
+            <div class="booking-summary__date-row">
+              <span class="booking-summary__date-label">Заезд</span>
+              <span class="booking-summary__date-value">18 июня 2026</span>
+            </div>
+            <div class="booking-summary__date-row">
+              <span class="booking-summary__date-label">Выезд</span>
+              <span class="booking-summary__date-value">20 июня 2026</span>
+            </div>
+            <div class="booking-summary__date-row">
+              <span class="booking-summary__date-label">Гости</span>
+              <span class="booking-summary__date-value">2 взрослых</span>
+            </div>
+            <div class="booking-summary__date-row">
+              <span class="booking-summary__date-label">Номер</span>
+              <span class="booking-summary__date-value">Шатр Deluxe</span>
+            </div>
+          </div>
+          <div class="booking-summary__price-rows">
+            <div class="booking-summary__price-row">
+              <span>8 500 ₽ × 2 ночи</span>
+              <span>17 000 ₽</span>
+            </div>
+            <div class="booking-summary__price-row">
+              <span>Сервисный сбор</span>
+              <span>0 ₽</span>
+            </div>
+            <div class="booking-summary__price-row">
+              <span>Налоги</span>
+              <span>0 ₽</span>
+            </div>
+            <div class="booking-summary__price-row booking-summary__price-row--total">
+              <span>Итого</span>
+              <span>17 000 ₽</span>
+            </div>
+          </div>
+          <div class="booking-summary__timer">
+            <span>⏱️</span> Цена действительна ещё 14:59
+          </div>
+          <button class="booking-summary__btn" onclick="submitBooking()">Оплатить и забронировать</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="success-modal">
+    <div class="modal">
+      <div class="modal__icon">✓</div>
+      <h2 class="modal__title">Бронирование подтверждено!</h2>
+      <p class="modal__text">Ваше бронирование успешно оформлено.</p>
+      <p class="modal__text">Подтверждение отправлено на email.</p>
+      <div class="modal__code">HP-20260618-001</div>
+      <a href="profile.html" class="modal__btn">Перейти в личный кабинет</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div class="footer__logo">
+            <div class="header__logo-icon">🏨</div>
+            HotelPay
+          </div>
+          <p class="footer__desc">Современная платформа для бронирования отелей и глемпингов по всей России.</p>
+          
+        </div>
+        <div>
+          <div class="footer__title">О нас</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">О компании</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Карьера</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Пресса</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Блог</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__title">Поддержка</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Центр помощи</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Условия</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Конфиденциальность</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Контакты</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__title">Партнёрам</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Добавить объект</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Личный кабинет</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">API</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Реклама</a>
+          </div>
+          <div class="footer__subscribe">
+            <div class="footer__subscribe-form">
+              <input type="email" class="footer__subscribe-input" placeholder="Ваш email">
+              <button class="footer__subscribe-btn" onclick="alert('Подписка оформлена!')">→</button>
+            </div>
+          </div>
+          <div class="footer__payments">
+            <div class="footer__payment">VISA</div>
+            <div class="footer__payment">MC</div>
+            <div class="footer__payment">МИР</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <div class="footer__copyright">© 2026 HotelPay. Все права защищены.</div>
+        <div>🇷🇺 Русский</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/hotels.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baikal Eco Lodge — HotelPay</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/property.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo">
+        <div class="header__logo-icon">🏨</div>
+        HotelPay
+      </a>
+      <nav class="header__nav">
+        <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+                <a href="promotions.html" class="header__nav-link" >Акции</a>
+      <a href="#" class="mobile-menu__link" onclick="toggleChat(); return false;">Поддержка</a>
+      </nav>
+      <div class="header__actions">
+        <div class="header__search">
+          <input type="text" class="header__search-input" placeholder="Поиск...">
+          <button class="header__btn header__search-toggle">🔍</button>
+        </div>
+        <button class="header__btn" onclick="if(!isLoggedIn()){requireAuthForFavorites('profile.html#favorites');}else{location.href='profile.html#favorites';}">
+          ❤️
+          <span class="header__btn-badge" style="display:none">0</span>
+        </button>
+        <a href="login.html" class="header__btn header__btn--primary" id="auth-btn">Войти</a>
+        <button class="header__menu-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu">
+    <nav class="mobile-menu__nav">
+      <a href="catalog.html" class="header__nav-link" id="nav-catalog">Каталог</a>
+            <a href="promotions.html" class="mobile-menu__link" >Акции</a>
+      <a href="#" class="mobile-menu__link" onclick="toggleChat(); return false;">Поддержка</a>
+      <a href="profile.html" class="mobile-menu__link">Личный кабинет</a>
+    </nav>
+  </div>
+
+  <main class="property-page page-content">
+    <div class="container">
+      <div class="property-gallery">
+        <div class="property-gallery__main" style="background-image: url(images/baikal-eco-lodge.jpg); background-size: cover;">
+          <div class="property-gallery__overlay">
+            <button class="property-gallery__btn" onclick="openLightbox(0)">🔍 Смотреть все фото</button>
+          </div>
+        </div>
+        <div class="property-gallery__thumb" style="background-image: url(images/baikal-ice.jpg); background-size: cover;">
+          <div class="property-gallery__overlay">
+            <button class="property-gallery__btn" onclick="openLightbox(1)">🔍</button>
+          </div>
+        </div>
+        <div class="property-gallery__thumb" style="background-image: url(images/baikal-winter.jpg); background-size: cover;">
+          <div class="property-gallery__overlay">
+            <button class="property-gallery__btn" onclick="openLightbox(2)">🔍</button>
+          </div>
+          <div class="property-gallery__more">+8 фото</div>
+        </div>
+      </div>
+
+      <div class="property-info">
+        <div class="property-info__grid">
+          <div class="property-info__main">
+            <div class="property-info__header">
+              <h1 class="property-info__title">Baikal Eco Lodge</h1>
+              <div class="property-info__meta">
+                <div class="property-info__rating">
+                  <span class="property-info__rating-score">4.7</span>
+                  <span class="property-info__rating-text">Отлично</span>
+                  <span class="property-info__rating-count">· 67 отзывов</span>
+                </div>
+                <div class="property-info__location">📍 Иркутск, Иркутская область, Россия</div>
+              </div>
+            </div>
+
+            <div class="property-info__badges">
+              <span class="property-info__badge">Эко-отдых</span>
+              <span class="property-info__badge">Можно с животными</span>
+              <span class="property-info__badge">Йога на рассвете</span>
+            </div>
+
+            <div class="property-desc">
+              <p class="property-desc__text collapsed" id="property-desc-text">
+                Экологичные купола на берегу Байкала. Уникальный опыт проживания с видом на самое глубокое озеро мира. Органические продукты и йога на рассвете. Идеально для тех, кто ищет гармонию с природой.
+
+                Купола оборудованы панорамными окнами для наблюдения за звёздным небом и северным сиянием. Тёплые полы и камин создают уют даже в суровые зимние ночи.
+
+                На территории работает органическая ферма — гости могут собирать свежие овощи и ягоды. Каждое утро начинается с йоги на берегу озера и купания в кристально чистой воде Байкала.
+              </p>
+              <span class="property-desc__more" onclick="toggleDesc()" id="desc-toggle">Читать полностью ▼</span>
+            </div>
+
+            <div class="property-amenities">
+              <h2 class="property-amenities__title">Удобства</h2>
+              <div class="property-amenities__grid" id="amenities-grid">
+                <div class="amenity-item">
+                  <div class="amenity-item__icon">📶</div>
+                  <span class="amenity-item__name">Бесплатный Wi-Fi</span>
+                </div>
+                <div class="amenity-item">
+                  <div class="amenity-item__icon">🏊</div>
+                  <span class="amenity-item__name">Бассейн</span>
+                </div>
+                <div class="amenity-item">
+                  <div class="amenity-item__icon">🅿️</div>
+                  <span class="amenity-item__name">Бесплатная парковка</span>
+                </div>
+                <div class="amenity-item">
+                  <div class="amenity-item__icon">💆</div>
+                  <span class="amenity-item__name">SPA и велнес</span>
+                </div>
+                <div class="amenity-item">
+                  <div class="amenity-item__icon">🍽️</div>
+                  <span class="amenity-item__name">Ресторан</span>
+                </div>
+                <div class="amenity-item">
+                  <div class="amenity-item__icon">🐕</div>
+                  <span class="amenity-item__name">Можно с животными</span>
+                </div>
+                <div class="amenity-item">
+                  <div class="amenity-item__icon">❄️</div>
+                  <span class="amenity-item__name">Кондиционер</span>
+                </div>
+                <div class="amenity-item">
+                  <div class="amenity-item__icon">🌡️</div>
+                  <span class="amenity-item__name">Отопление</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="property-rooms">
+              <h2 class="property-rooms__title">Доступные номера</h2>
+              <div id="rooms-container">
+                <div class="room-card">
+                  <div class="room-card__img" style="background-image: url(images/baikal-eco-lodge.jpg); background-size: cover;"></div>
+                  <div class="room-card__info">
+                    <h3 class="room-card__name">Купол Standard</h3>
+                    <div class="room-card__details">
+                      <span class="room-card__detail">📐 25 м²</span>
+                      <span class="room-card__detail">👥 До 2 гостей</span>
+                    </div>
+                    <div class="room-card__amenities">
+                      <span class="room-card__amenity">Кондиционер</span>
+                      <span class="room-card__amenity">Джакузи</span>
+                      <span class="room-card__amenity">Мини-бар</span>
+                      <span class="room-card__amenity">Терраса</span>
+                    </div>
+                  </div>
+                  <div class="room-card__price-block">
+                    <div class="room-card__price">
+                      <span class="room-card__price-value">6 200 ₽</span>
+                      <span class="room-card__price-unit">/ночь</span>
+                    </div>
+                    <a href="booking.html?hotel=3&room=0" onclick="if(!isLoggedIn()){event.preventDefault();requireAuth('booking.html?hotel=3&room=0');}" class="room-card__btn">Выбрать</a>
+                  </div>
+                </div>
+                <div class="room-card">
+                  <div class="room-card__img" style="background-image: url(images/baikal-ice.jpg); background-size: cover;"></div>
+                  <div class="room-card__info">
+                    <h3 class="room-card__name">Купол Panorama</h3>
+                    <div class="room-card__details">
+                      <span class="room-card__detail">📐 30 м²</span>
+                      <span class="room-card__detail">👥 До 4 гостей</span>
+                    </div>
+                    <div class="room-card__amenities">
+                      <span class="room-card__amenity">Кондиционер</span>
+                      <span class="room-card__amenity">Детская площадка</span>
+                      <span class="room-card__amenity">Барбекю</span>
+                      <span class="room-card__amenity">Гостиная</span>
+                    </div>
+                  </div>
+                  <div class="room-card__price-block">
+                    <div class="room-card__price">
+                      <span class="room-card__price-value">8 900 ₽</span>
+                      <span class="room-card__price-unit">/ночь</span>
+                    </div>
+                    <a href="booking.html?hotel=3&room=1" onclick="if(!isLoggedIn()){event.preventDefault();requireAuth('booking.html?hotel=3&room=1');}" class="room-card__btn">Выбрать</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="property-reviews">
+              <div class="property-reviews__header">
+                <h2 class="property-reviews__title">Отзывы гостей</h2>
+                <a href="#" class="property-card__btn" style="padding: 8px 16px; font-size: 0.85rem;" onclick="alert('Форма отзыва скоро!')">Написать отзыв</a>
+              </div>
+
+              <div class="reviews-summary">
+                <div class="reviews-summary__score">
+                  <div class="reviews-summary__score-value">4.7</div>
+                  <div class="reviews-summary__score-text">Отлично<br>67 отзывов</div>
+                </div>
+                <div class="reviews-summary__bars">
+                  <div class="reviews-summary__bar">
+                    <span class="reviews-summary__bar-label">5 ★</span>
+                    <div class="reviews-summary__bar-track"><div class="reviews-summary__bar-fill" style="width: 78%"></div></div>
+                    <span class="reviews-summary__bar-count">97</span>
+                  </div>
+                  <div class="reviews-summary__bar">
+                    <span class="reviews-summary__bar-label">4 ★</span>
+                    <div class="reviews-summary__bar-track"><div class="reviews-summary__bar-fill" style="width: 18%"></div></div>
+                    <span class="reviews-summary__bar-count">22</span>
+                  </div>
+                  <div class="reviews-summary__bar">
+                    <span class="reviews-summary__bar-label">3 ★</span>
+                    <div class="reviews-summary__bar-track"><div class="reviews-summary__bar-fill" style="width: 3%"></div></div>
+                    <span class="reviews-summary__bar-count">4</span>
+                  </div>
+                  <div class="reviews-summary__bar">
+                    <span class="reviews-summary__bar-label">2 ★</span>
+                    <div class="reviews-summary__bar-track"><div class="reviews-summary__bar-fill" style="width: 1%"></div></div>
+                    <span class="reviews-summary__bar-count">1</span>
+                  </div>
+                  <div class="reviews-summary__bar">
+                    <span class="reviews-summary__bar-label">1 ★</span>
+                    <div class="reviews-summary__bar-track"><div class="reviews-summary__bar-fill" style="width: 0%"></div></div>
+                    <span class="reviews-summary__bar-count">0</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="reviews__track" style="display: flex; flex-direction: column; gap: 16px;" id="property-reviews-list">
+                <div class="review-card" style="flex: none;">
+                  <div class="review-card__header">
+                    <div class="review-card__avatar">АК</div>
+                    <div class="review-card__meta">
+                      <div class="review-card__name">Ольга М.</div>
+                      <div class="review-card__date">1 июня 2026</div>
+                    </div>
+                  </div>
+                  <div class="review-card__rating">⭐⭐⭐⭐⭐</div>
+                  <div class="review-card__text">Купол на берегу Байкала — это что-то невероятное! Просыпаться под звёздное небо и засыпать под шум волн. Незабываемо!</div>
+                </div>
+                <div class="review-card" style="flex: none;">
+                  <div class="review-card__header">
+                    <div class="review-card__avatar">МР</div>
+                    <div class="review-card__meta">
+                      <div class="review-card__name">Дмитрий С.</div>
+                      <div class="review-card__date">1 июня 2026</div>
+                    </div>
+                  </div>
+                  <div class="review-card__rating">⭐⭐⭐⭐⭐</div>
+                  <div class="review-card__text">Йога на рассвете, органическая еда и кристально чистый воздух. Это место исцеляет душу и тело. Обязательно вернусь.</div>
+                </div>
+                <div class="review-card" style="flex: none;">
+                  <div class="review-card__header">
+                    <div class="review-card__avatar">ЕВ</div>
+                    <div class="review-card__meta">
+                      <div class="review-card__name">Анна К.</div>
+                      <div class="review-card__date">1 июня 2026</div>
+                    </div>
+                  </div>
+                  <div class="review-card__rating">⭐⭐⭐⭐</div>
+                  <div class="review-card__text">Очень атмосферное место. Единственный минус — немного шумно от ветра ночью, но беруши решили проблему. Природа вокруг волшебная.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="property-info__sidebar">
+            <div class="booking-widget">
+              <div class="booking-widget__price">
+                <span class="booking-widget__price-value">6 200 ₽</span>
+                <span class="booking-widget__price-unit">/ночь</span>
+              </div>
+              <div class="booking-widget__dates">
+                <div class="booking-widget__field" onclick="selectDate('checkin')">
+                  <div class="booking-widget__field-label">Заезд</div>
+                  <div class="booking-widget__field-value">18 июня</div>
+                </div>
+                <div class="booking-widget__field" onclick="selectDate('checkout')">
+                  <div class="booking-widget__field-label">Выезд</div>
+                  <div class="booking-widget__field-value">20 июня</div>
+                </div>
+              </div>
+              <div class="booking-widget__guests" onclick="selectGuests()">
+                <div class="booking-widget__field-label">Гости</div>
+                <div class="booking-widget__field-value">2 гостя, 1 номер</div>
+              </div>
+              <a href="booking.html?hotel=3" onclick="if(!isLoggedIn()){event.preventDefault();requireAuth('booking.html?hotel=1');}" class="booking-widget__btn">Забронировать</a>
+              <div class="booking-widget__note">
+                <span>✓</span> Бесплатная отмена до 17 июня
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <section class="similar-properties">
+      <div class="container">
+        <h2 class="similar-properties__title">Похожие объекты рядом</h2>
+        <div class="properties-grid" id="similar-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox__close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox__nav lightbox__nav--prev" onclick="prevImage()">‹</button>
+    <img src="" alt="" class="lightbox__img" id="lightbox-img">
+    <button class="lightbox__nav lightbox__nav--next" onclick="nextImage()">›</button>
+    <div class="lightbox__counter" id="lightbox-counter">1 / 12</div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div class="footer__logo">
+            <div class="header__logo-icon">🏨</div>
+            HotelPay
+          </div>
+          <p class="footer__desc">Современная платформа для бронирования отелей и глемпингов по всей России.</p>
+          
+        </div>
+        <div>
+          <div class="footer__title">О нас</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">О компании</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Карьера</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Пресса</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Блог</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__title">Поддержка</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Центр помощи</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Условия</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Конфиденциальность</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Контакты</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__title">Партнёрам</div>
+          <div class="footer__links">
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Добавить объект</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Личный кабинет</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">API</a>
+            <a href="#" class="footer__link" onclick="openFooterModal('help'); return false;">Реклама</a>
+          </div>
+          <div class="footer__subscribe">
+            <div class="footer__subscribe-form">
+              <input type="email" class="footer__subscribe-input" placeholder="Ваш email">
+              <button class="footer__subscribe-btn" onclick="alert('Подписка оформлена!')">→</button>
+            </div>
+          </div>
+          <div class="footer__payments">
+            <div class="footer__payment">VISA</div>
+            <div class="footer__payment">MC</div>
+            <div class="footer__payment">МИР</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <div class="footer__copyright">© 2026 HotelPay. Все права защищены.</div>
+        <div>🇷🇺 Русский</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/hotels.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/footer.js"></script>
+</body>
+</html>
